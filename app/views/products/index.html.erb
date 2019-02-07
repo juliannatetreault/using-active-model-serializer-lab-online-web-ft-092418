@@ -8,6 +8,7 @@
 <script type="text/javascript" charset="utf-8">
 $(function() {
   $(".js-more").on("click", function() {
+    event.preventDefault();
     var id = $(this).data("id");
     $.get("/products/" + id + "/description", function(description) {
       $.get("/products/" + id + "/inventory", function(inventory) {
@@ -16,9 +17,13 @@ $(function() {
           inventoryText = "<strong>Sold Out</strong>";
         }
         var descriptionText = "<p>" + description + "</p><p>" + inventoryText + "</p>";
+        data.orders.forEach(function(order) {
+          descriptionText += '<li class="js-order" data-id="' + order["id"] + '">' + order["id"] + ' - ' + order["created_at"] + '</li>';
+        })
         $("#product-" + id).html(descriptionText);
       });
     });
   });
 });
 </script>
+
